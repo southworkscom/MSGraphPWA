@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 import * as UserAuth from '../services/userAuth';
+import * as AppModes from '../services/appMode';
 
 import { AppointmentCalendar } from './Calendar';
 
@@ -16,7 +17,7 @@ export class Header extends React.Component<{}, HeaderState> {
     constructor() {
         super();
 
-        let demoMode = window.localStorage.getItem('demoMode') === 'enabled';
+        let demoMode = AppModes.isDemoMode();
 
         if (demoMode) {
             // DEMO MODE

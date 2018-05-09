@@ -15,6 +15,7 @@ import * as Notifications from './services/notifications';
 import * as ServiceWorker from './services/serviceWorker';
 import * as LockScreen from './services/lockScreen';
 import * as GraphServices from './services/graphServices';
+import * as AppMode from './services/appMode';
 
 function renderApp() {
     // This code starts up the React app when it runs in a browser. It sets up the routing
@@ -34,11 +35,11 @@ ServiceWorker.init().then(() =>
     Notifications.register());
 
 // Demo Mode toggler
-let demoMode = window.localStorage.getItem('demoMode') === 'enabled';
+let demoMode = AppMode.isDemoMode();
 window.addEventListener('keyup', (e: any) => {
     if(e.key && e.key.toLowerCase() === 'd' && e.shiftKey) {
-        let newMode = demoMode ? 'disabled' : 'enabled';
-        window.localStorage.setItem('demoMode', newMode);
+        let newMode = demoMode ? AppMode.modes.ENABLED : AppMode.modes.DISABLED;
+        AppMode.setMode(newMode);
         alert('Demo mode "' + newMode + '"');
         window.location.reload(true);
     }
