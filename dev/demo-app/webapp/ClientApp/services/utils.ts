@@ -12,8 +12,8 @@ export const asCalendarAppointment = (o): CalendarAppointment => ({
     toDateTime: o.end.dateTime,
     duration: getDuration(o.start.dateTime, o.end.dateTime).asMinutes(),
     details: o.subject,
-    type: 'meeting',                                              // TODO: Review
-    insight: o.subject.toLowerCase().includes('goat')      // TODO: REVIEW!
+    type: 'meeting',
+    insight: o.subject.toLowerCase().includes('goat')
 })
 
 export const getTime = (dateTime: string): number => {
