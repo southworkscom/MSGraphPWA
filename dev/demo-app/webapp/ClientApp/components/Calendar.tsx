@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Listener } from 'events';
 
 import * as CalendarModel from '../models/calendar';
@@ -14,10 +14,17 @@ export interface AppointmentCalendarState {
 
 export class AppointmentCalendar extends React.Component<{}, AppointmentCalendarState> {
     _handleStoreUpdate: Listener;
+    _scheduleRef: any;
+    _setScheduleRef: any;
     constructor() {
         super();
         this.state = { appointments: store.get() };
         this._handleStoreUpdate = this.onStoreUpdate.bind(this);
+        this._scheduleRef = null;
+        
+        this._setScheduleRef = element => {
+            this._scheduleRef = element;
+        };
     }
 
     componentWillMount() {
@@ -36,23 +43,21 @@ export class AppointmentCalendar extends React.Component<{}, AppointmentCalendar
         });
     }
 
+    componentDidUpdate() {
+        if(!this.state.newAppointment || !this._scheduleRef) {
+            return;
+        }
+
+        let rows = CalendarModel.appointmentsToRows(1000, 1800, this.state.appointments);
+        let newRoxIx = rows.findIndex(r => r.appointments.indexOf(this.state.newAppointment as CalendarModel.CalendarAppointment) > -1);
+        let divIx = newRoxIx * 4;
+        this._scheduleRef.children[divIx].scrollIntoView();
+    }
+
     public render() {
         let rows = CalendarModel.appointmentsToRows(1000, 1800, this.state.appointments);
 
-        // HACK
-        if (this.state.newAppointment) {
-            let newRoxIx = rows.findIndex(r => r.appointments.indexOf(this.state.newAppointment as CalendarModel.CalendarAppointment) > -1);
-            let divIx = newRoxIx * 4;
-            setTimeout(() => {
-                let schedule = document.getElementById('schedule');
-                if (!schedule) return;
-                schedule.children[divIx].scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }, 150);
-        }
-
-        return (<div className="insight" id="schedule">
+        return (<div className="insight" id="schedule" ref={this._setScheduleRef}>
             {rows.map(r => asRow(r))}
         </div>);
     }
