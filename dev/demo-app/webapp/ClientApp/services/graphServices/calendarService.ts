@@ -26,7 +26,7 @@ export class CalendarService extends BaseService {
         // schedule a "relaxation" session after each meeting
 
         // 1. read the attachment image
-        let base64img = await Utils.asDataUri('images/goat-notification.png');
+        let base64img = await Utils.asDataUri('images/goats/6.jpg');
 
         // 2. for each detected meeting, create a new event
         let relaxationEvents = new Array<any>();
@@ -35,6 +35,10 @@ export class CalendarService extends BaseService {
             let end = Utils.moment(new Date(e.toDateTime as string)).add(30, 'minutes');
             let relaxationEvent = {
                 subject: "Goat Yoga session",
+                body: {
+                    contentType: 'HTML',
+                    content: '<html><body><img src="cid:my_inline_attachment" /></body></html>'
+                },
                 start: {
                     dateTime: start.format(),
                     timeZone: userTimezone
@@ -54,8 +58,10 @@ export class CalendarService extends BaseService {
                     // 3. Update event with attachment
                     let id = res.id;
                     let attachment = {
-                        '@odata.type': '#microsoft.graph.fileAttachment',
-                        'name': 'goat.png',
+                        '@odata.type': '#Microsoft.OutlookServices.FileAttachment',
+                        'name': 'goat.jpg',
+                        'contentId': 'my_inline_attachment',
+                        'isInline': true,
                         'contentBytes': base64img
                     };
                     return this.client
