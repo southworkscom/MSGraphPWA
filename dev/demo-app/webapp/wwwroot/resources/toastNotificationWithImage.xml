@@ -1,0 +1,9 @@
+<toast>
+    <visual>
+        <binding template="ToastGeneric">
+            <text hint-maxLines="1"></text>
+            <text></text>
+            <image placement="" src=""/>
+        </binding>
+    </visual>
+</toast>

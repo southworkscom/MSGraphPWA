@@ -8,17 +8,12 @@ export function register() {
     Notification.requestPermission((result) => console.log('Notification permission request:', result));
 }
 
-export function showNotification(title: string, body: string) {
+export async function showNotification(title: string, body: string) : Promise<boolean> {
     var serviceWorkerRegistration = ServiceWorker.getServiceWorkerRegistration();
-    if (!serviceWorkerRegistration) return;
+    if (!serviceWorkerRegistration) return new Promise<boolean>(() => false);
 
     // use Windows notification, default to Service Worker notification
-    return showWindowsNotification(title, body, '/images/goat-notification.png') || serviceWorkerRegistration.showNotification(title, {
-        body: body,
-        image: '/images/goat-notification.png',
-        icon: '/images/icons/icon-96x96.png',
-        vibrate: 100
-    } as any);
+    return await showWindowsNotification(title, body, '/images/goat-notification.png') || await showNotificationAsyncWrapper(serviceWorkerRegistration, title, body);
 }
 
 export async function registerNativePushNotification(): Promise<string | null> {
@@ -52,7 +47,7 @@ export async function registerNativePushNotification(): Promise<string | null> {
     return deviceId;
 }
 
-function showWindowsNotification(title: string, body: string, image: string) {
+async function showWindowsNotification(title: string, body: string, image: string) : Promise<boolean> {
     if (!window.Windows) return false;
 
     var notifications = Windows.UI.Notifications;
@@ -61,7 +56,8 @@ function showWindowsNotification(title: string, body: string, image: string) {
     var notificationManager = notifications.ToastNotificationManager;
 
     var toastXml = new Windows.Data.Xml.Dom.XmlDocument();
-    toastXml.loadXml('<toast><visual><binding template="ToastGeneric"><text hint-maxLines="1"></text><text></text><image placement="" src=""/></binding></visual></toast>')
+    const xmlResponse = await fetch("/resources/toastNotificationWithImage.xml")
+    toastXml.loadXml(await xmlResponse.text());
 
     // You can use the methods from the XML document to specify the required elements for the toast.
     var images = toastXml.getElementsByTagName("image");
@@ -69,9 +65,6 @@ function showWindowsNotification(title: string, body: string, image: string) {
     var url = window.location.protocol + "//" + window.location.host + image;
 
     images[0].setAttribute("src", url);
-
-    // Use hero image
-    // images[0].setAttribute("placement", "hero");
 
     //Set notification text
     var textNodes = toastXml.getElementsByTagName("text");
@@ -85,6 +78,17 @@ function showWindowsNotification(title: string, body: string, image: string) {
     notificationManager.createToastNotifier().show(toast);
 
     return true;
+}
+
+async function showNotificationAsyncWrapper(serviceWorkerRegistration: ServiceWorkerRegistration, title: string, body: string) : Promise<boolean> {
+    serviceWorkerRegistration.showNotification(title, {
+        body: body,
+        image: '/images/goat-notification.png',
+        icon: '/images/icons/icon-96x96.png',
+        vibrate: 100
+    } as any);
+
+    return new Promise<boolean>(() => true);
 }
 
 function getDeviceId() {

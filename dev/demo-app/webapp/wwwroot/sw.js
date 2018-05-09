@@ -36,7 +36,8 @@ var urlsToCache = [
     '/images/goats/16.jpg',
     '/images/goats/17.jpg',
     '/images/goats/18.jpg',
-    '/images/goats/19.jpg'
+    '/images/goats/19.jpg',
+    '/resources/toastNotificationWithImage.xml'
 ];
 
 self.addEventListener('install', function (event) {
