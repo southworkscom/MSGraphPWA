@@ -38,7 +38,7 @@ ServiceWorker.init().then(() =>
 let demoMode = AppMode.isDemoMode();
 window.addEventListener('keyup', (e: any) => {
     if(e.key && e.key.toLowerCase() === 'd' && e.shiftKey) {
-        let newMode = demoMode ? AppMode.modes.ENABLED : AppMode.modes.DISABLED;
+        let newMode = demoMode ? AppMode.modes.DISABLED : AppMode.modes.ENABLED;
         AppMode.setMode(newMode);
         alert('Demo mode "' + newMode + '"');
         window.location.reload(true);
