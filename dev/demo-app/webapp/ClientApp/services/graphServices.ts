@@ -1,8 +1,6 @@
 import { Client as GraphClient } from '@microsoft/microsoft-graph-client';
 
-import * as moment from 'moment';
-import momentDurationFormatSetup from 'moment-duration-format';
-momentDurationFormatSetup(moment);
+import * as Utils from './utils';
 import * as UserAuth from './userAuth';
 import { CalendarAppointment } from '../models/calendar';
 import { BackendBaseUrl } from './config';
@@ -34,7 +32,7 @@ const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 class CalendarService extends BaseService {
     async retrieveCalendarForToday(): Promise<Array<CalendarAppointment>> {
         // Get Calendar for today
-        let today = moment().startOf('day');
+        let today = Utils.moment().startOf('day');
 
         let response = await this.client
             .api('/me/calendarview')
@@ -45,20 +43,20 @@ class CalendarService extends BaseService {
             .get();
 
         // Map to CalendarAppointment
-        return response.value.map(asCalendarAppointment);
+        return response.value.map(Utils.asCalendarAppointment);
     }
 
     async addRelaxationEventsAfter(meetings: Array<CalendarAppointment>): Promise<Array<CalendarAppointment>> {
         // schedule a "relaxation" session after each meeting
 
         // 1. read the attachment image
-        let base64img = await asDataUri('images/goat-notification.png');
+        let base64img = await Utils.asDataUri('images/goat-notification.png');
 
         // 2. for each detected meeting, create a new event
         let relaxationEvents = new Array<any>();
         await meetings.map(e => {
-            let start = moment(new Date(e.toDateTime as string));
-            let end = moment(new Date(e.toDateTime as string)).add(30, 'minutes');
+            let start = Utils.moment(new Date(e.toDateTime as string));
+            let end = Utils.moment(new Date(e.toDateTime as string)).add(30, 'minutes');
             let relaxationEvent = {
                 subject: "Goat Yoga session",
                 start: {
@@ -90,7 +88,7 @@ class CalendarService extends BaseService {
                 });
         });
 
-        return relaxationEvents.map(asCalendarAppointment);
+        return relaxationEvents.map(Utils.asCalendarAppointment);
     }
 }
 
@@ -120,7 +118,7 @@ class SubscriptionService extends BaseService {
             'changeType': 'created',
             'notificationUrl': listenUri,
             'resource': SubscriptionService.SentMailResourcePath,
-            'expirationDateTime': moment().startOf('day').add(4200, 'minutes').format(),
+            'expirationDateTime': Utils.moment().startOf('day').add(4200, 'minutes').format(),
             'clientState': deviceId
         };
 
@@ -136,41 +134,4 @@ class SubscriptionService extends BaseService {
 export const instances = {
     calendar: new CalendarService(),
     subscription: new SubscriptionService()
-};
-
-const asCalendarAppointment = (o): CalendarAppointment => ({
-    from: getTime(o.start.dateTime),
-    fromDateTime: o.start.dateTime,
-    to: getTime(o.end.dateTime),
-    toDateTime: o.end.dateTime,
-    duration: getDuration(o.start.dateTime, o.end.dateTime).asMinutes(),
-    details: o.subject,
-    type: 'meeting',                                              // TODO: Review
-    insight: o.subject.toLowerCase().includes('goat')      // TODO: REVIEW!
-})
-
-const getTime = (dateTime: string): number => {
-    return parseInt(moment(new Date(dateTime)).format('HHmm'), 10);
-}
-
-const getDuration = (start: string, end: string): any => {
-    let time = new Date(end).getTime() - new Date(start).getTime();
-    return moment.duration(time, "milliseconds");
-}
-
-const asDataUri = (url) => {
-    return new Promise((resolve, reject) => {
-        var image: any = new Image();
-        image.onload = function () {
-            var canvas: any = document.createElement('canvas');
-            canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
-            canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
-
-            canvas.getContext('2d').drawImage(this, 0, 0);
-            var base64 = canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, '');
-            resolve(base64);
-        };
-
-        image.src = url;
-    });
 };
