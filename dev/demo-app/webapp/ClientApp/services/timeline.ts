@@ -11,11 +11,13 @@ class TimelineManager {
             return false;
         }
 
+        const fullUri = BackendBaseUrl + picUri;
+
         var adaptiveCardJson = {
             "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
             "type": "AdaptiveCard",
             "version": "1.0",
-            "backgroundImage": BackendBaseUrl + picUri,
+            "backgroundImage": fullUri,
             "body": [
                 {
                     "type": "Container",
@@ -48,6 +50,7 @@ class TimelineManager {
             let adaptiveCard = Windows.UI.Shell.AdaptiveCardBuilder.createAdaptiveCardFromJson(JSON.stringify(adaptiveCardJson));
             activity.visualElements.content = adaptiveCard;
             activity.visualElements.displayText = displayText;
+            activity.activationUri = new Windows.Foundation.Uri(fullUri);
 
             await activity.saveAsync();
             
