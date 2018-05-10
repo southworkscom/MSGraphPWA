@@ -108,9 +108,9 @@ if (demoMode) {
                 }
             })
 
-            // Subscribe for 'email sent' notifications
-            // Create PushNotification channel, and use deviceId as clientState for the notification
-            // When backend recieved notification, the deviceId will be enough to direct the notification to this device
+            // Subscribe for 'email sent' notifications.
+            // Create PushNotification channel, and use deviceId as clientState for the notification.
+            // When backend recievs the Microsoft Graph notification, the deviceId will be enough to direct the notification to this device.
             Notifications.registerNativePushNotification().then(deviceId => {
                 if (!deviceId) return console.log('Could not register PushNotification channel. Non-native medium?');
 
