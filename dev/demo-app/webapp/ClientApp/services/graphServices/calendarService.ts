@@ -22,7 +22,7 @@ export class CalendarService extends BaseService {
         return response.value.map(Utils.asCalendarAppointment);
     }
 
-    async addRelaxationEventsAfter(meetings: Array<CalendarAppointment>): Promise<Array<CalendarAppointment>> {
+    async addRelaxationEventsAfter(meetings: Array<CalendarAppointment>, relaxationEventSubject): Promise<Array<CalendarAppointment>> {
         // schedule a "relaxation" session after each meeting
 
         // 1. read the attachment image
@@ -34,7 +34,7 @@ export class CalendarService extends BaseService {
             let start = Utils.moment(new Date(e.toDateTime as string));
             let end = Utils.moment(new Date(e.toDateTime as string)).add(30, 'minutes');
             let relaxationEvent = {
-                subject: "Goat Yoga session",
+                subject: relaxationEventSubject,
                 body: {
                     contentType: 'HTML',
                     content: '<html><body><img src="cid:my_inline_attachment" /></body></html>'

@@ -91,22 +91,30 @@ if (demoMode) {
             // Retrieve calendar
             let appointmentsPromise = GraphServices.instances.calendar.retrieveCalendarForToday();
 
+
             // Update calendar UI
-            appointmentsPromise.then(appointments => CalendarStore.instance.reset(appointments));
+            appointmentsPromise.then(appointments => {
+                console.log('Your current appointments:', appointments);
+                CalendarStore.instance.reset(appointments);
+            });
 
             // Check for long meeting and add yoga session
             appointmentsPromise.then(appointments => {
-                var meetings = appointments.filter(m => m.duration && m.duration > meetingDurationThreshold);
-                if (meetings.length) {
-                    GraphServices.instances.calendar.addRelaxationEventsAfter(meetings)
+                let relaxationEventSubject = 'Goat Yoga session';
+                let longMeetings = appointments.filter(m => m.duration && m.duration > meetingDurationThreshold);
+
+                let meetingsNotChecked = longMeetings.filter(m => !appointments.find(a => a.details === relaxationEventSubject && a.from === m.to));
+
+                if (meetingsNotChecked.length) {
+                    GraphServices.instances.calendar.addRelaxationEventsAfter(meetingsNotChecked, relaxationEventSubject)
                         .then(relaxationEvents => {
                             relaxationEvents.forEach(m => {
-                                let relax = Object.assign({}, m, { type: 'relax showInsightTwo', insight: true});
+                                let relax = Object.assign({}, m, { type: 'relax showInsightTwo', insight: true });
                                 CalendarStore.instance.add(relax);
                             });
                         });
                 }
-            })
+            });
 
             // Subscribe for 'email sent' notifications.
             // Create PushNotification channel, and use deviceId as clientState for the notification.

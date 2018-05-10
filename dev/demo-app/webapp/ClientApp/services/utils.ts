@@ -12,7 +12,7 @@ export const asCalendarAppointment = (o): CalendarAppointment => ({
     toDateTime: o.end.dateTime,
     duration: getDuration(o.start.dateTime, o.end.dateTime).asMinutes(),
     details: o.subject,
-    type: 'meeting',
+    type: o.subject.toLowerCase().includes('goat') ? 'relax showInsightTwo' : 'meeting',
     insight: o.subject.toLowerCase().includes('goat')
 })
 
