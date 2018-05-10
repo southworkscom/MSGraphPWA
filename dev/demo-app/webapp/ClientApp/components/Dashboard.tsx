@@ -25,7 +25,9 @@ export class Dashboard extends React.Component<RouteComponentProps<{}>, Dashboar
             selectedPicture: pic
         });
 
-        Timeline.createTimelineActivity('picture', 'Oh! A Goat!', pic);
+        const activityId = new Date().getTime() + "_picture_" + pic;
+
+        Timeline.createTimelineActivity(activityId, 'Oh! A Goat!', pic);
     }
 
     public render() {
