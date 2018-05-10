@@ -50,7 +50,7 @@ class TimelineManager {
             let adaptiveCard = Windows.UI.Shell.AdaptiveCardBuilder.createAdaptiveCardFromJson(JSON.stringify(adaptiveCardJson));
             activity.visualElements.content = adaptiveCard;
             activity.visualElements.displayText = displayText;
-            activity.activationUri = new Windows.Foundation.Uri(fullUri);
+            activity.activationUri = new Windows.Foundation.Uri("build-2018-demo:/" + picUri);
 
             await activity.saveAsync();
             

@@ -127,6 +127,17 @@ renderApp();
 declare var Windows: any;
 if (typeof Windows !== 'undefined') {
     document.body.classList.add('showOne')
+
+    //Register onActivated for timeline activities
+    Windows.UI.WebUI.WebUIApplication.onactivated = (eventArgs) => {
+        console.log("activated via " + eventArgs.detail.kind + ". " + JSON.stringify(eventArgs));
+        //if (eventArgs.detail.kind == Windows.ApplicationModel.Activation.ActivationKind.protocol) {
+        //    const text = "activated via protocol. Uri: " + eventArgs.detail.uri.rawUri;
+        //    console.log(text);
+
+        //    // The received URI is eventArgs.detail.uri.rawUri
+        //}
+    };
 }
 
 // Allow Hot Module Replacement

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:build="http://schemas.microsoft.com/developer/appx/2015/build" IgnorableNamespaces="uap mp build"> 
 	<Identity Name="INSERT-YOUR-PACKAGE-IDENTITY-NAME-HERE" Publisher="CN=INSERT-YOUR-PACKAGE-IDENTITY-PUBLISHER-HERE" Version="1.0.0.0" ProcessorArchitecture="neutral"/> 
 	<mp:PhoneIdentity PhoneProductId="46fbef95-c50c-d1ac-a95a-e921b0017976" PhonePublisherId="00000000-0000-0000-0000-000000000000"/> 
@@ -42,6 +42,13 @@
 				
 				<uap:Rule Type="include" WindowsRuntimeAccess="all" Match="http://localhost:5000/"/>
 			</uap:ApplicationContentUriRules>
+			      <Extensions>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="build-2018-demo">
+            <uap:DisplayName>BUILD2018DEMO</uap:DisplayName>
+          </uap:Protocol>
+        </uap:Extension>
+      </Extensions>
 		</Application> 
 	</Applications> 
 
