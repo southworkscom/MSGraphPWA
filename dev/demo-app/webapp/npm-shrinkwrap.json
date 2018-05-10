@@ -85,6 +85,11 @@
       "integrity": "sha1-MEQ4FkfhHulzxa8uklMjkw9pHYA=",
       "dev": true
     },
+    "@types/winjs": {
+      "version": "4.4.0",
+      "resolved": "https://registry.npmjs.org/@types/winjs/-/winjs-4.4.0.tgz",
+      "integrity": "sha1-EpXvWz7Q36nkCnH/K2HpUGGDZs8="
+    },
     "acorn": {
       "version": "5.0.3",
       "resolved": "https://registry.npmjs.org/acorn/-/acorn-5.0.3.tgz",
