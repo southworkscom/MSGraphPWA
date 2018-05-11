@@ -13,21 +13,33 @@ export class DashboardState {
 }
 
 export class Dashboard extends React.Component<RouteComponentProps<{}>, DashboardState> {
-    constructor() {
-        super();
-        this.state = { isOpen: false }
+    constructor(props) {
+        super(props);
+        this.state = this.loadPicture(props) || { isOpen: false };
     }
 
     openPic(pic: string) {
 
-        this.setState({
-            isOpen: true,
-            selectedPicture: pic
-        });
+        this.setState(this.generateOpenPicState(pic));
 
         const activityId = new Date().getTime() + "_picture_" + pic;
 
         Timeline.createTimelineActivity(activityId, 'Oh! A Goat!', pic);
+    }
+
+    generateOpenPicState(pic: string) {
+        return {
+            isOpen: true,
+            selectedPicture: pic
+        };
+    }
+
+    loadPicture(props) {
+        if (props.location.pathname && props.location.pathname.includes("images")) {
+            const pic: string = goatPics.find((goatPic) => goatPic.includes(props.location.pathname)) || "";
+            return this.generateOpenPicState(pic);
+        }
+        return null;
     }
 
     public render() {

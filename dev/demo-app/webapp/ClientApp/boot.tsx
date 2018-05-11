@@ -130,13 +130,12 @@ if (typeof Windows !== 'undefined') {
 
     //Register onActivated for timeline activities
     Windows.UI.WebUI.WebUIApplication.onactivated = (eventArgs) => {
-        console.log("activated via " + eventArgs.detail.kind + ". " + JSON.stringify(eventArgs));
-        //if (eventArgs.detail.kind == Windows.ApplicationModel.Activation.ActivationKind.protocol) {
-        //    const text = "activated via protocol. Uri: " + eventArgs.detail.uri.rawUri;
-        //    console.log(text);
-
-        //    // The received URI is eventArgs.detail.uri.rawUri
-        //}
+        console.log("activated via " + eventArgs.detail[0].kind + ". " + JSON.stringify(eventArgs.detail[0].uri));
+        if (eventArgs.detail[0].uri && eventArgs.detail[0].uri.path) {
+            let path: string = eventArgs.detail[0].uri.path;
+            path = path.substring(0, path.lastIndexOf('.'));
+            window.location.replace(window.location.protocol + "//" + window.location.host + path);
+        }
     };
 }
 
