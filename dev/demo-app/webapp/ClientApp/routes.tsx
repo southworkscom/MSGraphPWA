@@ -7,14 +7,15 @@ import { VideoPlayer } from './components/VideoPlayer';
 
 export const routes = <div>
     <RouteWithLayout layout={Layout} exact path='/' component={ Dashboard } />
-    <RouteWithLayout layout={EmptyLayout} path='/video' component={ VideoPlayer } />
+    <RouteWithLayout layout={EmptyLayout} path='/video' component={VideoPlayer} />
+    <RouteWithLayout layout={Layout} path='/images' component={Dashboard} />
 </div>;
 
 
-function RouteWithLayout({layout, component, ...rest}){
+function RouteWithLayout({ layout, component, ...rest }) {
     return (
-      <Route {...rest} render={(props) =>
-        React.createElement( layout, props, React.createElement(component, props))
+        <Route {...rest} render={(props) =>
+            React.createElement(layout, props, React.createElement(component, props))
       }/>
     );
   }
