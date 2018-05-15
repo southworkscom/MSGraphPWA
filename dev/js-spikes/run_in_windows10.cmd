@@ -1,0 +1,1 @@
+@pwabuilder run windows10 package\JSSPIKES -l debug

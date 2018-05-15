@@ -1,4 +1,4 @@
-var cacheName = 'goat-cache-v3';
+var cacheName = 'jspsikes-cache-v1';
 var urlsToCache = [
     '/',
     '/index.css',

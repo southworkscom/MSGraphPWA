@@ -1,7 +1,24 @@
-
 'use strict';
-
 const EventEmitter = require('events');
+
+// MARKUP
+/*
+        <div id="camera-capture">
+            <p>Upload a pic of your Goat Yoga session:</p>
+            <video id="video" muted autoplay></video>
+            <p>
+                <label for="videoSource">Video source: </label>
+                <select id="videoSource"></select>
+            </p>
+
+            <button id="captureButton">CAPTURE &amp; ANALIZE</button>
+
+            <p id="analysisStatus" class="off"></p>
+            <p>
+                <img id="captureFrame" class="off" />
+            </p>
+        </div>
+*/
 
 export default class CameraCapture extends EventEmitter {
     constructor(dom, navigator) {
