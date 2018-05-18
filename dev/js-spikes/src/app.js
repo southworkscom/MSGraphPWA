@@ -7,6 +7,9 @@ import { changeWindowsLockScreenImage } from './snippets/lockscreenBg';
 import { changeDesktopBackgroundImage } from './snippets/desktopBg';
 import { showToastNotification } from './snippets/toastNotification';
 import { addTimelineActivity } from './snippets/timeline';
+import { toggleFullscreen } from './snippets/fullscreen';
+import { setWindowsTitle } from './snippets/windowsTitle';
+import { showMessageDialog } from './snippets/messageDialog'
 
 export default class App {
     constructor(dom, navigator) {
@@ -30,6 +33,15 @@ export default class App {
         // Save Document DOM reference
         this.dom = dom;
 
+        this.dom.querySelector('#messageBoxButton').addEventListener('click',
+            () => {
+                showMessageDialog('This is a MessageDialog', 'Since alert and confirm are not supported on a PWA on Win10, MessageDialog can be used instead', ['Yes', 'No', 'Not sure...'])
+                    .then(option => console.log('Selected option:', option));
+            });
+
+        this.dom.querySelector('#fullscreenButton').addEventListener('click',
+            () => toggleFullscreen());
+
         this.dom.querySelector('#changeModeButton').addEventListener('click',
             () => toggleCompactOverlayMode().then(this.updateView.bind(this)));
 
@@ -38,6 +50,9 @@ export default class App {
 
         this.dom.querySelector('#toastNotificationButton').addEventListener('click',
             () => showToastNotification('Hello World!', 'You are working too hard! Here... have a goat!', '/images/goat-notification.png'));
+
+        this.dom.querySelector('#titleValue').addEventListener('keyup',
+            e => setWindowsTitle(e.srcElement.value));
 
         var testCounter = 1;
         var baseUrl = window.location.protocol + '//' + window.location.host;

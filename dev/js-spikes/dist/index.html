@@ -19,7 +19,10 @@
     <div id="main">
         <p>Notifications permission is
             <b id="notificationStatus">unavailable</b>.</p>
-
+        <hr />
+        <p>
+            <button id="fullscreenButton">Toggle FullScreen mode</button>
+        </p>
         <hr />
         <p>
             <button id="changeModeButton">Picture-in-Picture mode</button>
@@ -30,7 +33,17 @@
         </p>
         <hr />
         <p>
+            <button id="messageBoxButton">MessageBox</button>
+        </p>
+        <hr />
+        <p>
             <button id="timelineActivityButton">Create Timeline Activity</button>
+        </p>
+        <hr />
+        <p>
+            <label>
+                Window Title: <input type="text" id="titleValue" />
+            </label>
         </p>
         <hr />
         <p>
@@ -41,7 +54,9 @@
 
     </div>
 
-    <div id="goat-picture-container" class="off"><img id="goat-picture" src="/images/goat-notification.png" /></div>
+    <div id="goat-picture-container" class="off">
+        <img id="goat-picture" src="/images/goat-notification.png" />
+    </div>
 
     <script type="text/javascript" src="bundle.js"></script>
 

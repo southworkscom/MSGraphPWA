@@ -1,0 +1,1 @@
+@pwabuilder run windows10 package\BUILD2018DEMO -l debug
